@@ -12,16 +12,28 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
 
+  const initialVotes = Object.fromEntries(anecdotes.map((anecdote, index) => [index, 0]));
+
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(initialVotes)
 
   const randomSelected = () => {
     setSelected(Math.floor(Math.random() * anecdotes.length))
+  }
+
+  const addVote = () => {
+    const newVotes = {...votes} 
+    newVotes[selected]++
+    setVotes(newVotes)
   }
 
   return (
     <div>
       {anecdotes[selected]}
       <br></br>
+      {`has ${votes[selected]} votes`}
+      <br></br>
+      <button onClick={addVote}>vote</button>
       <button onClick={randomSelected}>next anecdote</button>
     </div>
   )
