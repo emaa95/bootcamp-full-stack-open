@@ -6,7 +6,13 @@ const Statistics = (props) => {
     const avg = total === 0 ? 0 : subAvg / total; 
     const avgPositive = total === 0 ? 0 : props.good / total;
 
-
+    if (total === 0) {
+        return (
+            <div>
+                <p>No feedback given</p>
+            </div>
+        )
+    }
     return (
     <div>
         <h2>statistics</h2>
