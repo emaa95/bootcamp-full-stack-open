@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react"
 import axios from 'axios'
+import { Card, CardContent, Typography } from "@mui/material"
+import './Country.css'
 
 const Country = ({country}) => {
     const [weather, setWeather] = useState(null)
@@ -16,16 +18,34 @@ const Country = ({country}) => {
     if (weather) {
     return (
         <div>
-            <h1>{country.name.common}</h1>
-            <p>capital: {country.capital}</p>
-            <p>population: {country.population}</p>
-            <h3>languages</h3>
-            <ul>
+            <Card variant="outlined" sx={{ maxWidth: "95%", backgroundColor: 'transparent', borderColor:'white' }}>
+            <CardContent className="country-color">
+            <div className="header-country">            
+            <Typography id='country-name' variant="h4">{country.name.common} </Typography> 
+            <div style={{ fontSize: '3em' }}>
+                {country.flag}
+            </div>
+            </div>
+            <div className="other-information">
+            <box className='box-capital'>
+                <p>Capital</p>
+                <p>{country.capital}</p>
+            </box>
+            <box className='box-population'> 
+            <p>Population</p> 
+            <p>{country.population}</p>
+            </box>
+            <box className='box-languages'>
+            <p>Languages</p>
                 {Object.keys(country.languages).map(language => (
-                    <li key={language}>{country.languages[language]} </li>
+                    <p key={language}>{country.languages[language]} </p>
                 ))}
-            </ul>
-            {country.flag}
+
+            </box>
+            </div>
+           
+            </CardContent>
+            </Card>
             {weather && ( 
                 <div>
                     <h2>Weather in {weather.name}</h2>
@@ -36,11 +56,13 @@ const Country = ({country}) => {
                     <p>wind: {weather.wind && weather.wind.speed} mph direction {weather.wind && weather.wind.deg}</p>
                 </div>
             )}
+            
         </div>
     )
     } else {
         return(
         <div>
+            
             <h1>{country.name.common}</h1>
             <p>capital: {country.capital}</p>
             <p>population: {country.population}</p>

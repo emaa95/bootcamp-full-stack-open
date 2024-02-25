@@ -1,0 +1,22 @@
+.country-color{
+    color: white;
+}
+
+.header-country{
+    display: flex;
+    align-items: center;
+}
+
+.box-capital .box-population .box-languages {
+    display: grid;
+    grid-template-rows: auto auto;
+}
+
+.other-information{
+    display: flex;
+    justify-content: space-between;
+}
+
+#country-name{
+    margin-right: 40px;
+}
