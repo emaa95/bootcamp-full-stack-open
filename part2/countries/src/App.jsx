@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Content from './components/Content'
 import {Card, CardContent, TextField, Typography} from '@mui/material'
-
 import './App.css'
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -57,12 +56,11 @@ function App() {
     )
 
   return (
-  <div className='root'>
   <div style={{ display: 'flex' }}>
-    <div style={{ flex: '1' }}>
-      <Card variant="outlined" sx={{ maxWidth: "95%", backgroundColor: 'transparent', borderColor:'white' }}>
+    <div style={{ flex: '1', marginRight: "10px", alignContent: 'center'}}>
+      <Card variant="outlined" sx={{ width: "100%", backgroundColor: 'transparent', borderColor:'white' }}>
       <CardContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-      <div style={{ display: 'flex', alignItems: 'center'}}>
+      <div style={{ display: 'flex'}}>
       <Typography variant='h2' color={'white'} style={{ marginRight: '50px', marginBottom: '20px' }}>
         Find countries
       </Typography>
@@ -114,7 +112,6 @@ function App() {
     </div>
       <div id="map" style={{ flex: '1', height: '400px' }}></div>
     </div>
-  </div>
   )
 }
 

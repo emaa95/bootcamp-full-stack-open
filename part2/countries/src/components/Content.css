@@ -1,0 +1,11 @@
+.content-container{
+    color: white;
+    max-width: 95%;
+    display: flex;
+}
+
+.country-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

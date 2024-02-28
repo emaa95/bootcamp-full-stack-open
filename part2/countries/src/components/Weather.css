@@ -1,15 +1,11 @@
-.country-color{
-    color: white;
-}
-
-.header-country{
+.weather-header{
     display: flex;
     align-items: center;
     justify-content: center;
     border: 5px solid white;
 }
 
-.box-capital, .box-population, .box-languages{
+.weather-temperature, .weather-wind, .weather-humidity{
     display: grid;
     grid-template-rows: auto auto;
     align-items: center;
@@ -17,17 +13,20 @@
     border: 1px solid white;
     margin-top: 10px;
     padding: 5px;
-    
 }
 
-.other-information{
+.weather-information{
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* Tres columnas del mismo tamaño */
     grid-gap: 10px; 
 }
 
-#country-name{
-    margin-right: 40px;
+.weather-container{
+    color: white;
+}
+
+.weather-header{
+    display: flex;
 }
 
 p {
@@ -36,7 +35,4 @@ p {
     align-items: center;
     margin: 7px
 }
-
-
-
 
