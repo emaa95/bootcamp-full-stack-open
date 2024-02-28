@@ -73,6 +73,15 @@ app.use(express.json());
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
+  if (!body || !body.name || !body.number) {
+    return response.status(400).json({ error: 'Name or number is missing in request body' })
+  }
+
+  const existingPerson = persons.find(person => person.name === body.name);
+  if (existingPerson) {
+    return response.status(400).json({ error: 'Name must be unique' });
+  }
+
   const newPerson = {
     id: randomId(),
     name: body.name,
