@@ -62,6 +62,27 @@ app.delete('/api/persons/:id', (request, response) => {
   }
 })
 
+const randomId = () => {
+  const minId = 1
+  const maxId = 1000000 
+  return Math.floor(Math.random() * (maxId - minId + 1)) + minId
+}
+
+app.use(express.json());
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  const newPerson = {
+    id: randomId(),
+    name: body.name,
+    number: body.number
+  }
+
+  persons = persons.concat(newPerson)
+  response.json(newPerson)
+
+})
 
 const PORT = 3001
 app.listen(PORT, () => {
