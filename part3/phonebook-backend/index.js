@@ -26,7 +26,17 @@ let persons = [
 
 ]
 
-app.use(morgan('tiny'));
+app.use(morgan((tokens, req, res) => {
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    '-',
+    tokens['response-time'](req, res), 'ms',
+    req.method === 'POST' ? JSON.stringify(req.body) : ''
+  ].join(' ');
+}));
+
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
