@@ -3,7 +3,8 @@ const express = require('express')
 const morgan = require('morgan');
 const app = express()
 const cors = require('cors')
-const Person = require('./models/person')
+const Person = require('./models/person');
+
 
 
 app.use(express.static('dist'))
@@ -58,12 +59,6 @@ app.delete('/api/persons/:id', (request, response) => {
   }
 })
 
-const randomId = () => {
-  const minId = 1
-  const maxId = 1000000 
-  return Math.floor(Math.random() * (maxId - minId + 1)) + minId
-}
-
 app.use(express.json());
 
 app.post('/api/persons', (request, response) => {
@@ -73,19 +68,14 @@ app.post('/api/persons', (request, response) => {
     return response.status(400).json({ error: 'Name or number is missing in request body' })
   }
 
-  const existingPerson = persons.find(person => person.name === body.name);
-  if (existingPerson) {
-    return response.status(400).json({ error: 'Name must be unique' });
-  }
-
-  const newPerson = {
-    id: randomId(),
+  const person = new Person({
     name: body.name,
     number: body.number
-  }
+  })
 
-  persons = persons.concat(newPerson)
-  response.json(newPerson)
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 
 })
 
