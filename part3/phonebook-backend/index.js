@@ -48,15 +48,12 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const initialLength = persons.length
-  persons = persons.filter(person => person.id !== id)
-  
-  if (persons.length < initialLength) {
+  Person.findByIdAndDelete(request.params.id)
+  .then(result => {
     response.status(204).end()
-  } else {
-    response.status(404).end()
-  }
+  }).catch(error => {
+    response.status(400).send({error: 'malformatted id or person not found'})
+  })
 })
 
 app.use(express.json());
