@@ -25,7 +25,10 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'DocumentNotFoundError') {
     return response.status(404).send({ error: 'person not found'})
-  } else {
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message})   
+  }
+  else {
     return response.status(500).send({ error: 'Server internal error'})
   }
 
@@ -74,7 +77,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
   }).catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body || !body.name || !body.number) {
@@ -89,6 +92,7 @@ app.post('/api/persons', (request, response) => {
   person.save().then(savedPerson => {
     response.json(savedPerson)
   })
+  .catch(error => next(error))
 
 })
 
