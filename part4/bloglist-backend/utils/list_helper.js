@@ -28,12 +28,31 @@ const mostBlogs = (blogs) => {
     author: authorWithMostBlogs,
     blogs: authorCounts[authorWithMostBlogs]
   };
+};
 
+const mostLikes = (blogs) => {
+  if (math.isEmpty(blogs)) {
+    return {};
+  }
+
+  const likesByAuthor = math.groupBy(blogs, 'author');
+
+  const authorLikes = math.mapValues(likesByAuthor, (blogs) => {
+    return math.sumBy(blogs, 'likes');
+  });
+
+  const authorWithMostLikes = math.maxBy(math.keys(authorLikes), (author) => authorLikes[author]);
+
+  return {
+    author: authorWithMostLikes,
+    likes: authorLikes[authorWithMostLikes]
+  };
 };
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 };
