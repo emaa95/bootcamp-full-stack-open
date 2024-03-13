@@ -27,6 +27,17 @@ describe('when there is initially some blogs saved', () => {
 
     expect(response.body).toHaveLength(helper.initialBlogs.length);
   });
+
+  test('blogs have unique identifier property "id"', async () => {
+    const response = await api.get('/api/blogs');
+
+    expect(response.body).toHaveLength(helper.initialBlogs.length);
+    response.body.forEach(blog => {
+      expect(blog.id).toBeDefined();
+      expect(blog._id).not.toBeDefined();
+    });
+  });
+
 });
 
 afterAll(() => {
