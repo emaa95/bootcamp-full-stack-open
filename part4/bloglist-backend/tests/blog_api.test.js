@@ -60,6 +60,22 @@ describe('addition of a new note', () => {
     const titles = blogsAtEnd.map(b => b.title);
     expect(titles).toContain('Nuevo blog post');
   });
+
+  test('missing likes property defaults to 0', async () => {
+    const newBlog = {
+      title: 'Nuevo blog sin likes',
+      author: 'Autor del nuevo post sin likes',
+      url: 'https://example.com/nuevo-post-sin-likes'
+    };
+
+    const response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.likes).toBe(0);
+  });
 });
 
 afterAll(() => {
