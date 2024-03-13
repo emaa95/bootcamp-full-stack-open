@@ -76,6 +76,25 @@ describe('addition of a new note', () => {
 
     expect(response.body.likes).toBe(0);
   });
+
+  test('missing title or url properties result in 400 Bad Request', async () => {
+    // 1. Arrange (preparar los datos)
+    const newBlog = {
+      author: 'Autor del blog',
+      likes: 2
+    };
+
+    // 2. Act (actuar sobre el sistema)
+    const response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400);
+
+    // 3. Assert (verificar los resultados)
+    expect(response.body.error).toBe('Title and URL are required');
+
+  });
+
 });
 
 afterAll(() => {
