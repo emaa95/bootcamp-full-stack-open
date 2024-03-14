@@ -111,6 +111,40 @@ describe('when there is initially some blogs saved', () => {
     });
   });
 
+  describe('updating of a blog', () => {
+    test('updating a blog\'s likes count', async () => {
+      const newBlog = {
+        title:'Masterpiece',
+        author:'Edsger W. Dijkstra',
+        url:'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+        likes:12
+      };
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201);
+
+      const allBlogs = await helper.blogsInDb();
+      const blogToUpdate = allBlogs.find(blog => blog.title === newBlog.title);
+
+      const updatedBlog = {
+        ...blogToUpdate,
+        likes: blogToUpdate.likes + 1
+      };
+
+      await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(updatedBlog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+
+      const blogsAtEnd = await helper.blogsInDb();
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+      const foundBlog = blogsAtEnd.find(blog => blog.likes === 13);
+      expect(foundBlog.likes).toBe(13);
+    });
+  });
 });
 
 

@@ -1,4 +1,5 @@
 const blogsRouter = require('express').Router();
+const { response } = require('../app');
 const Blog = require('../models/blog');
 
 blogsRouter.get('/', async (request, response) => {
@@ -34,6 +35,22 @@ blogsRouter.delete('/:id', async (request, response) => {
     return response.status(404);
   }
   response.status(204).end();
+});
+
+blogsRouter.put('/:id', async (request,response) => {
+  const body = request.body;
+
+  const blog = {
+    likes: body.likes
+  };
+
+  const updateBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true } );
+
+  if (!updateBlog) {
+    return response.status(404).json({ error: 'Blog not found' });
+  }
+
+  response.status(200).json(updateBlog);
 });
 
 module.exports = blogsRouter;
