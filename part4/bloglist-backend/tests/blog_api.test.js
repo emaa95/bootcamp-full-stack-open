@@ -4,16 +4,21 @@ const app = require('../app');
 const api = supertest(app);
 const helper = require('./test_helper');
 const Blog = require('../models/blog');
+const User = require('../models/user');
+
+beforeEach(async () => {
+
+  await User.deleteMany({});
+
+  await Blog.deleteMany({});
+
+  const blogObjects = helper.initialBlogs
+    .map(blog => new Blog(blog));
+  const promiseArray = blogObjects.map(blog => blog.save());
+  await Promise.all(promiseArray);
+}, 10000);
 
 describe('when there is initially some blogs saved', () => {
-  beforeEach(async () => {
-    await Blog.deleteMany({});
-
-    const blogObjects = helper.initialBlogs
-      .map(blog => new Blog(blog));
-    const promiseArray = blogObjects.map(blog => blog.save());
-    await Promise.all(promiseArray);
-  });
 
   test('blogs are returned as json', async () => {
     await api
@@ -38,7 +43,29 @@ describe('when there is initially some blogs saved', () => {
     });
   });
 
-  describe('addition of a new note', () => {
+  describe('addition of a new blog', () => {
+    let headers;
+
+    beforeEach(async () => {
+      const newUser = {
+        username: 'root',
+        name: 'root',
+        password: 'password',
+      };
+
+      await api
+        .post('/api/users')
+        .send(newUser);
+
+      const result = await api
+        .post('/api/login')
+        .send(newUser);
+
+      headers = {
+        'Authorization': `bearer ${result.body.token}`
+      };
+    });
+
     test('succceeds with a valid data', async () => {
       const newBlog = {
         title: 'Nuevo blog post',
@@ -50,6 +77,7 @@ describe('when there is initially some blogs saved', () => {
       await api
         .post('/api/blogs')
         .send(newBlog)
+        .set(headers)
         .expect(201)
         .expect('Content-Type', /application\/json/);
 
@@ -70,6 +98,7 @@ describe('when there is initially some blogs saved', () => {
       const response = await api
         .post('/api/blogs')
         .send(newBlog)
+        .set(headers)
         .expect(201)
         .expect('Content-Type', /application\/json/);
 
@@ -87,6 +116,7 @@ describe('when there is initially some blogs saved', () => {
       const response = await api
         .post('/api/blogs')
         .send(newBlog)
+        .set(headers)
         .expect(400);
 
       // 3. Assert (verificar los resultados)
@@ -97,21 +127,82 @@ describe('when there is initially some blogs saved', () => {
   });
 
   describe('deletion of a blog', () => {
+    let headers;
+
+    beforeEach(async () => {
+      const newUser = {
+        username: 'root',
+        name: 'root',
+        password: 'password',
+      };
+
+      await api
+        .post('/api/users')
+        .send(newUser);
+
+      const result = await api
+        .post('/api/login')
+        .send(newUser);
+
+      headers = {
+        'Authorization': `bearer ${result.body.token}`
+      };
+    });
+
     test('succeeds with status code 204 if id is valid', async () => {
-      const blogsAtStart = await helper.blogsInDb();
-      const blogToDelete = blogsAtStart[0];
+      const newBlog = {
+        title:'Masterpiece',
+        author:'Edsger W. Dijkstra',
+        url:'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+        likes:12
+      };
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .set(headers)
+        .expect(201);
+
+      const allBlogs = await helper.blogsInDb();
+      const blogToDelete = allBlogs.find(blog => blog.title === newBlog.title);
+
 
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
+        .set(headers)
         .expect(204);
 
       const blogsAtEnd = await helper.blogsInDb();
 
-      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length -1 );
+      const contents = blogsAtEnd.map(b => b.title);
+
+      expect(contents).not.toContain(blogToDelete.title);
     });
   });
 
   describe('updating of a blog', () => {
+    let headers;
+
+    beforeEach(async () => {
+      const newUser = {
+        username: 'root',
+        name: 'root',
+        password: 'password',
+      };
+
+      await api
+        .post('/api/users')
+        .send(newUser);
+
+      const result = await api
+        .post('/api/login')
+        .send(newUser);
+
+      headers = {
+        'Authorization': `bearer ${result.body.token}`
+      };
+    });
+
     test('updating a blog\'s likes count', async () => {
       const newBlog = {
         title:'Masterpiece',
@@ -123,6 +214,7 @@ describe('when there is initially some blogs saved', () => {
       await api
         .post('/api/blogs')
         .send(newBlog)
+        .set(headers)
         .expect(201);
 
       const allBlogs = await helper.blogsInDb();
