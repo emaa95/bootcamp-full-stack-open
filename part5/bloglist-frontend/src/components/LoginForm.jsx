@@ -6,6 +6,7 @@ const LoginForm = ({handleLogin}) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null)
 
     const handleLoginFormSubmit = async (event) => {
         event.preventDefault();
@@ -24,7 +25,7 @@ const LoginForm = ({handleLogin}) => {
     
       return (
         <div>
-          <Notification error={errorMessage} />
+          <Notification error={errorMessage} success={successMessage} />
           <form onSubmit={handleLoginFormSubmit}>
             <div>
               username
