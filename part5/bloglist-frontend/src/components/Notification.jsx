@@ -3,7 +3,7 @@ import './Notification.css'
 const Notification = ({ error, success }) => {
     
 
-    if (error === null || success === null) {
+    if (error === null && success === null) {
       return null
     }
     

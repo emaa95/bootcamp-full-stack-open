@@ -10,6 +10,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -46,6 +47,23 @@ const App = () => {
         }, 5000)
       })
   }
+
+  const updateBlog = async (id, blogObject) => {
+    try {
+      const updatedBlog = await blogService.update(id,blogObject)
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog))
+      setSuccessMessage(`${blogObject.title} was updated successfully`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
+    } catch (e) {
+      setErrorMessage(`Cannot update blog ${blogObject.title}`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   return (
     <div>
       {user === null ? (
@@ -53,7 +71,7 @@ const App = () => {
       ) : (
         <div>
           <h2>blogs</h2>
-          <Notification success={successMessage} />
+          <Notification success={successMessage} error={errorMessage} />
           <p>
             {`${user.username} logged in`}{" "}
             <button onClick={handleLogout}>logout</button>
@@ -65,7 +83,7 @@ const App = () => {
           />
           </Togglable>
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} addLike={updateBlog}/>
           ))}
         </div>
       )}
