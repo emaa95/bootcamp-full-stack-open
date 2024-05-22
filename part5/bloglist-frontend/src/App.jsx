@@ -9,9 +9,6 @@ import BlogForm from "./components/BlogForm";
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null)
-  const [newTitle, setNewTitle] = useState("")
-  const [newAuthor, setNewAuthor] = useState("")
-  const [newUrl, setNewUrl] = useState("")
   const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
@@ -38,22 +35,12 @@ const App = () => {
     setUser(null)
   }
   
-  const addBlog = (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl
-    }
-  
+  const addBlog = (blogObject) => {
     blogService
       .create(blogObject)
         .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        setNewTitle('')
-        setNewAuthor('')
-        setNewUrl('')
-        setSuccessMessage(`${newTitle} was created successfully`)
+        setSuccessMessage(`${blogObject.title} was created successfully`)
         setTimeout(() => {
           setSuccessMessage(null)
         }, 5000)
@@ -74,13 +61,7 @@ const App = () => {
           <h3>create new</h3>
           <Togglable buttonLabel="create">
           <BlogForm
-            newTitle={newTitle}
-            newAuthor={newAuthor}
-            newUrl={newUrl}
-            handleTitleChange={({ target }) => setNewTitle(target.value)}
-            handleAuthorChange={({ target }) => setNewAuthor(target.value)}
-            handleUrlChange={({ target }) => setNewUrl(target.value)}
-            handleSubmit={addBlog}
+            createBlog={addBlog}
           />
           </Togglable>
           {blogs.map((blog) => (
