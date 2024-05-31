@@ -1,55 +1,132 @@
 import { useState } from "react";
 import loginService from "../services/login";
 import Notification from "../components/Notification";
+import {
+  Button,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import PersonIcon from '@mui/icons-material/Person';
+import { styled } from '@mui/material/styles';
+import login from "../assets/login.jpg"
+import './LoginForm.css'
 
-const LoginForm = ({handleLogin}) => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [errorMessage, setErrorMessage] = useState(null);
-    const [successMessage, setSuccessMessage] = useState(null)
+const LoginForm = ({ handleLogin }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
-    const handleLoginFormSubmit = async (event) => {
-        event.preventDefault();
-        try {
-          const user = await loginService.login({username, password});
-          handleLogin(user)
-          setUsername("");
-          setPassword("");
-        } catch (error) {
-          setErrorMessage("Wrong credentials...");
-          setTimeout(() => {
-            setErrorMessage(null);
-          }, 5000);
-        }
-      };
-    
-      return (
-        <div>
-          <Notification error={errorMessage} success={successMessage} />
-          <form onSubmit={handleLoginFormSubmit}>
-            <div>
-              username
-              <input
-                type="text"
-                value={username}
-                name="Username"
-                onChange={({ target }) => setUsername(target.value)}
-              />
-            </div>
-            <div>
-              password
-              <input
-                type="password"
-                value={password}
-                name="Password"
-                onChange={({ target }) => setPassword(target.value)}
-              />{" "}
-            </div>{" "}
-            <button type="submit">login</button>{" "}
-          </form>
-        </div>
-      );
-    };
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
-export default LoginForm
+  const handleLoginFormSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const user = await loginService.login({ username, password });
+      handleLogin(user);
+      setUsername("");
+      setPassword("");
+    } catch (error) {
+      setErrorMessage("Wrong credentials...");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  };
+
+  const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  }));
+
+  return (
+    <div className="div-principal">
+      <Notification error={errorMessage} success={successMessage} />
+      <form onSubmit={handleLoginFormSubmit} className="div-form">
+        <img
+          src={login}
+          width={"100%"}
+          height={"40%"}
+          loading="lazy"
+          style={{ borderRadius: "8px" }}
+        />
+        <FormControl variant="outlined" fullWidth style={{ margin: "15px 0" }}>
+          <InputLabel
+            htmlFor="outlined-adornment-username"
+            sx={{ color: "white" }}
+          >
+            Username
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-username"
+            endAdornment={
+              <InputAdornment position="end">
+                <PersonIcon style={{ color: "white" }} />
+              </InputAdornment>
+            }
+            label="Username"
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+            inputProps={{ style: { color: "white" } }}
+          />
+        </FormControl>
+        <FormControl variant="outlined" fullWidth style={{ margin: "15px 0" }}>
+          <InputLabel
+            htmlFor="outlined-adornment-password"
+            sx={{ color: "white" }}
+          >
+            Password
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? "text" : "password"}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? (
+                    <VisibilityOff style={{ color: "white" }} />
+                  ) : (
+                    <Visibility style={{ color: "white" }} />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+            inputProps={{ style: { color: "white" } }}
+          />
+        </FormControl>
+        <ColorButton
+          variant="contained"
+          type="submit"
+          fullWidth
+          style={{ margin: "15px 0" }}
+          sx={{backgroundColor:'#5b95d6'}}
+        >
+          Log in
+        </ColorButton>
+      </form>
+    </div>
+  );
+};
+
+export default LoginForm;

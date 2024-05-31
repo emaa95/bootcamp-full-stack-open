@@ -1,4 +1,17 @@
 import { useState } from "react"
+import {
+  Button,
+  FormControl,
+  Icon,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+} from "@mui/material";
+import TitleIcon from '@mui/icons-material/Title';
+import author from '../assets/icons8-writer-male-24-white.png'
+import url from '../assets/icons8-url-24.png'
+import AddIcon from '@mui/icons-material/Add';
+import './BlogForm.css'
 
 const BlogForm = ({ createBlog }) => {
 
@@ -31,36 +44,73 @@ const BlogForm = ({ createBlog }) => {
 }
 
     return (
-        <form onSubmit={addBlog}>
-            <div>
-              title
-              <input
-                type="text"
-                value={newTitle}
-                name="Title"
-                onChange={handleTitleChange}
-              />
-            </div>
-            <div>
-              author
-              <input
-                type="text"
-                value={newAuthor}
-                name="Author"
-                onChange={handleAuthorChange}
-              />
-            </div>
-            <div>
-              url
-              <input
-                type="text"
-                value={newUrl}
-                name="Url"
-                onChange={handleUrlChange}
-              />
-            </div>
-            <button type="submit">create</button>{" "}
-          </form>
+      <div className="div-principal2">
+        <form onSubmit={addBlog} className="form-add">
+          <FormControl variant="outlined" style={{ marginRight: "15px" }}>
+          <InputLabel
+            htmlFor="outlined-adornment-username"
+            sx={{ color: "white" }}
+          >
+            Title
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-username"
+            endAdornment={
+              <InputAdornment position="end">
+                <TitleIcon style={{ color: "white" }} />
+              </InputAdornment>
+            }
+            label="Title"
+            value={newTitle}
+            onChange={handleTitleChange}
+            inputProps={{ style: { color: "white" } }}
+          />
+        </FormControl>
+        <FormControl variant="outlined" style={{ marginRight: "15px" }}>
+          <InputLabel
+            htmlFor="outlined-adornment-username"
+            sx={{ color: "white" }}
+          >
+            Author
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-username"
+            endAdornment={
+              <InputAdornment position="end">
+                <Icon sx={{ color: "white" }}><img src={author} alt="author"/></Icon>
+              </InputAdornment>
+            }
+            label="Author"
+            value={newAuthor}
+            onChange={handleAuthorChange}
+            inputProps={{ style: { color: "white" } }}
+          />
+        </FormControl>
+        <FormControl variant="outlined" style={{ marginRight: "15px" }}>
+          <InputLabel
+            htmlFor="outlined-adornment-username"
+            sx={{ color: "white" }}
+          >
+            URL
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-username"
+            endAdornment={
+              <InputAdornment position="end">
+                <Icon sx={{ color: "white" }}><img src={url} alt="url"/></Icon>
+              </InputAdornment>
+            }
+            label="URL"
+            value={newUrl}
+            onChange={handleUrlChange}
+            inputProps={{ style: { color: "white" } }}
+          />
+        </FormControl>
+       
+        <Button type="submit" variant='contained' size="large" style={{ fontSize: '20px', backgroundColor:'#5b95d6'}}>+</Button>
+        
+      </form>
+    </div>
     )
  }
 

@@ -1,13 +1,12 @@
+import { Card, Button } from "@mui/material"
 import { useState } from "react"
+import './Blog.css'
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const Blog = ({ blog, addLike, deleteBlog }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
 
   const [blogVisible, setBlogVisible] = useState(false)
 
@@ -32,23 +31,35 @@ const Blog = ({ blog, addLike, deleteBlog }) => {
 
   if (blogVisible === false) {
   return(
-  <div style={blogStyle}>
-  <div style={hideWhenVisible}>
-    {blog.title} <button onClick={() => setBlogVisible(true)}>view</button>
+  
+  <div style={hideWhenVisible} className="div-card">
+  <Card className="card">
+    <h1>{blog.title}</h1> <Button variant='contained' onClick={() => setBlogVisible(true)} endIcon={<VisibilityIcon></VisibilityIcon>} sx={{backgroundColor:'#5b95d6'}}>view</Button>
+  </Card>
+   
   </div> 
-  </div>
+  
   ) 
   } else {
     return(
-      <div style={blogStyle}>
-      <div style={showWhenVisible}>
-        {blog.title} <button onClick={() => setBlogVisible(false)}>hide</button>
+      <div style={showWhenVisible} className="div-card2">
+        <Card className="card">
+        <h1>{blog.title}</h1> <Button onClick={() => setBlogVisible(false)} variant='contained' endIcon={<VisibilityOffIcon/>} sx={{backgroundColor:'#5b95d6'}}>hide</Button>
         <p>{blog.url}</p>
-        <p>likes {blog.likes} <button onClick={handleLike}>like</button></p>
+      
         <p>{blog.author}</p>
-        <button onClick={handleRemove}>remove</button>
+        <p>{blog.likes}</p>
+        <div className="div-buttons">
+        <Button onClick={handleLike} variant='contained' className="button like-button">
+          <FavoriteIcon className="heart-icon"/>
+        </Button>
+        <Button onClick={handleRemove} variant='contained' className="button">
+          <DeleteIcon />
+        </Button>
+        </div>
+        </Card>
       </div>
-      </div>
+  
     )
   }
 }

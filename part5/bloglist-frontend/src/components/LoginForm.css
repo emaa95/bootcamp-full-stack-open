@@ -1,0 +1,31 @@
+.div-principal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.div-form{
+    width: 50%;
+    max-width: 400px;
+    max-height: 500px;
+    background-color: transparent;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    margin: 5%;
+}
+
+@media (max-height: 500px) {
+    img {
+      display: none;
+    }
+}
+
+@media (max-height: 200px) {
+    .div-form{
+        flex-direction: row;
+    }
+}

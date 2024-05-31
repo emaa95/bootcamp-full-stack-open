@@ -5,6 +5,10 @@ import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import Togglable from "./components/Togglable"
 import BlogForm from "./components/BlogForm";
+import { Button } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
+import './App.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -25,6 +29,14 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
+  const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  }));
+  
   const handleLogin = (loggedInUser) => {
     window.localStorage.setItem("loggedBlogappUser", JSON.stringify(loggedInUser));
     blogService.setToken(loggedInUser.token);
@@ -66,7 +78,7 @@ const App = () => {
 
   const deleteBlog = async (id) => {
     try {
-      const deletedBlog = await blogService.remove(id)
+      await blogService.remove(id)
       setBlogs(blogs.filter(blog => blog.id !== id))
       setSuccessMessage(`Blog was successfully deleted`)
       setTimeout(() => {
@@ -88,21 +100,25 @@ const App = () => {
         <LoginForm handleLogin={handleLogin} />
       ) : (
         <div>
-          <h2>blogs</h2>
+          <h1 className="title">Blogs</h1>
           <Notification success={successMessage} error={errorMessage} />
-          <p>
+          <p style={{color:'white', marginLeft:'15px'}}>
             {`${user.username} logged in`}{" "}
-            <button onClick={handleLogout}>logout</button>
+            <ColorButton onClick={handleLogout} sx={{backgroundColor:'#5b95d6'}}>Log out</ColorButton>
           </p>
-          <h3>create new</h3>
-          <Togglable buttonLabel="create">
+          <h2 style={{color:'white', marginLeft:'15px'}}>Create new</h2>
+          <Togglable buttonLabel="create" icon={<AddIcon></AddIcon>}>
           <BlogForm
             createBlog={addBlog}
           />
           </Togglable>
+          <div className="div-galery">
           {blogsSortedLike.map((blog) => (
-            <Blog key={blog.id} blog={blog} addLike={updateBlog} deleteBlog={deleteBlog}/>
+            
+              <Blog key={blog.id} blog={blog} addLike={updateBlog} deleteBlog={deleteBlog}/>
+            
           ))}
+          </div>
         </div>
       )}
     </div>

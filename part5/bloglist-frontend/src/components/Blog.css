@@ -1,0 +1,41 @@
+.card{
+    margin: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    background-color: #375696 !important;
+    color: white !important;
+    width: 180px;
+    border-radius: 10px !important;
+}
+
+.div-buttons{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.button{
+    min-width: 25px !important;
+    padding: 5px !important;
+    background-color: #477cc9 !important;   
+    color: white;
+    /*transition: color 1s ease, transform 1s ease !important;*/
+}
+
+.heart-icon {
+    color: white; /* Inicialmente blanco */
+    transition: color 3s ease, transform 3s ease !important;
+  }
+  
+  .like-button:active .heart-icon {
+    color: red !important;
+    transform: scale(1.2);
+  }
+  
+
+h1{
+    margin: 0;
+}
