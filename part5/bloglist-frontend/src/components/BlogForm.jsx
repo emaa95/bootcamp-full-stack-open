@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 import {
   Button,
   FormControl,
@@ -6,23 +6,23 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
-} from "@mui/material";
-import TitleIcon from '@mui/icons-material/Title';
+} from '@mui/material'
+import TitleIcon from '@mui/icons-material/Title'
 import author from '../assets/icons8-writer-male-24-white.png'
 import url from '../assets/icons8-url-24.png'
-import AddIcon from '@mui/icons-material/Add';
 import './BlogForm.css'
+import PropTypes from 'prop-types'
 
 const BlogForm = ({ createBlog }) => {
 
-  const [newTitle, setNewTitle] = useState("")
-  const [newAuthor, setNewAuthor] = useState("")
-  const [newUrl, setNewUrl] = useState("")
-  
+  const [newTitle, setNewTitle] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
+
   const handleTitleChange = (event) => {
     setNewTitle(event.target.value)
   }
-  
+
   const handleAuthorChange = (event) => {
     setNewAuthor(event.target.value)
   }
@@ -41,15 +41,15 @@ const BlogForm = ({ createBlog }) => {
     setNewTitle('')
     setNewAuthor('')
     setNewUrl('')
-}
+  }
 
-    return (
-      <div className="div-principal2">
-        <form onSubmit={addBlog} className="form-add">
-          <FormControl variant="outlined" style={{ marginRight: "15px" }}>
+  return (
+    <div className="div-principal2">
+      <form onSubmit={addBlog} className="form-add">
+        <FormControl variant="outlined" style={{ marginRight: '15px' }}>
           <InputLabel
             htmlFor="outlined-adornment-username"
-            sx={{ color: "white" }}
+            sx={{ color: 'white' }}
           >
             Title
           </InputLabel>
@@ -57,19 +57,19 @@ const BlogForm = ({ createBlog }) => {
             id="outlined-adornment-username"
             endAdornment={
               <InputAdornment position="end">
-                <TitleIcon style={{ color: "white" }} />
+                <TitleIcon style={{ color: 'white' }} />
               </InputAdornment>
             }
             label="Title"
             value={newTitle}
             onChange={handleTitleChange}
-            inputProps={{ style: { color: "white" } }}
+            inputProps={{ style: { color: 'white' } }}
           />
         </FormControl>
-        <FormControl variant="outlined" style={{ marginRight: "15px" }}>
+        <FormControl variant="outlined" style={{ marginRight: '15px' }}>
           <InputLabel
             htmlFor="outlined-adornment-username"
-            sx={{ color: "white" }}
+            sx={{ color: 'white' }}
           >
             Author
           </InputLabel>
@@ -77,19 +77,19 @@ const BlogForm = ({ createBlog }) => {
             id="outlined-adornment-username"
             endAdornment={
               <InputAdornment position="end">
-                <Icon sx={{ color: "white" }}><img src={author} alt="author"/></Icon>
+                <Icon sx={{ color: 'white' }}><img src={author} alt="author"/></Icon>
               </InputAdornment>
             }
             label="Author"
             value={newAuthor}
             onChange={handleAuthorChange}
-            inputProps={{ style: { color: "white" } }}
+            inputProps={{ style: { color: 'white' } }}
           />
         </FormControl>
-        <FormControl variant="outlined" style={{ marginRight: "15px" }}>
+        <FormControl variant="outlined" style={{ marginRight: '15px' }}>
           <InputLabel
             htmlFor="outlined-adornment-username"
-            sx={{ color: "white" }}
+            sx={{ color: 'white' }}
           >
             URL
           </InputLabel>
@@ -97,21 +97,25 @@ const BlogForm = ({ createBlog }) => {
             id="outlined-adornment-username"
             endAdornment={
               <InputAdornment position="end">
-                <Icon sx={{ color: "white" }}><img src={url} alt="url"/></Icon>
+                <Icon sx={{ color: 'white' }}><img src={url} alt="url"/></Icon>
               </InputAdornment>
             }
             label="URL"
             value={newUrl}
             onChange={handleUrlChange}
-            inputProps={{ style: { color: "white" } }}
+            inputProps={{ style: { color: 'white' } }}
           />
         </FormControl>
-       
-        <Button type="submit" variant='contained' size="large" style={{ fontSize: '20px', backgroundColor:'#5b95d6'}}>+</Button>
-        
+
+        <Button type="submit" variant='contained' size="large" style={{ fontSize: '20px', backgroundColor:'#5b95d6' }}>+</Button>
+
       </form>
     </div>
-    )
- }
+  )
+}
+
+BlogForm.propTypes = {
+  createBlog: PropTypes.func.isRequired
+}
 
 export default BlogForm

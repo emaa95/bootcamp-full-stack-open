@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
-import Blog from "./components/Blog";
-import blogService from "./services/blogs";
-import Notification from "./components/Notification";
-import LoginForm from "./components/LoginForm";
-import Togglable from "./components/Togglable"
-import BlogForm from "./components/BlogForm";
-import { Button } from "@mui/material";
-import { styled } from '@mui/material/styles';
-import AddIcon from '@mui/icons-material/Add';
+import { useState, useEffect } from 'react'
+import Blog from './components/Blog'
+import blogService from './services/blogs'
+import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
+import { Button } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import AddIcon from '@mui/icons-material/Add'
 import './App.css'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
@@ -26,8 +26,8 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+    blogService.getAll().then((blogs) => setBlogs(blogs))
+  }, [])
 
   const ColorButton = styled(Button)(({ theme }) => ({
     color: theme.palette.primary.contrastText,
@@ -35,23 +35,23 @@ const App = () => {
     '&:hover': {
       backgroundColor: theme.palette.primary.dark,
     },
-  }));
-  
+  }))
+
   const handleLogin = (loggedInUser) => {
-    window.localStorage.setItem("loggedBlogappUser", JSON.stringify(loggedInUser));
-    blogService.setToken(loggedInUser.token);
-    setUser(loggedInUser);
-  };
+    window.localStorage.setItem('loggedBlogappUser', JSON.stringify(loggedInUser))
+    blogService.setToken(loggedInUser.token)
+    setUser(loggedInUser)
+  }
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
   }
-  
+
   const addBlog = (blogObject) => {
     blogService
       .create(blogObject)
-        .then(returnedBlog => {
+      .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
         setSuccessMessage(`${blogObject.title} was created successfully`)
         setTimeout(() => {
@@ -80,12 +80,12 @@ const App = () => {
     try {
       await blogService.remove(id)
       setBlogs(blogs.filter(blog => blog.id !== id))
-      setSuccessMessage(`Blog was successfully deleted`)
+      setSuccessMessage('Blog was successfully deleted')
       setTimeout(() => {
         setSuccessMessage(null)
       }, 5000)
     } catch (e) {
-      setErrorMessage(`Cannot delete blog`)
+      setErrorMessage('Cannot delete blog')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -102,27 +102,27 @@ const App = () => {
         <div>
           <h1 className="title">Blogs</h1>
           <Notification success={successMessage} error={errorMessage} />
-          <p style={{color:'white', marginLeft:'15px'}}>
-            {`${user.username} logged in`}{" "}
-            <ColorButton onClick={handleLogout} sx={{backgroundColor:'#5b95d6'}}>Log out</ColorButton>
+          <p style={{ color:'white', marginLeft:'15px' }}>
+            {`${user.username} logged in`}{' '}
+            <ColorButton onClick={handleLogout} sx={{ backgroundColor:'#5b95d6' }}>Log out</ColorButton>
           </p>
-          <h2 style={{color:'white', marginLeft:'15px'}}>Create new</h2>
+          <h2 style={{ color:'white', marginLeft:'15px' }}>Create new</h2>
           <Togglable buttonLabel="create" icon={<AddIcon></AddIcon>}>
-          <BlogForm
-            createBlog={addBlog}
-          />
+            <BlogForm
+              createBlog={addBlog}
+            />
           </Togglable>
           <div className="div-galery">
-          {blogsSortedLike.map((blog) => (
-            
+            {blogsSortedLike.map((blog) => (
+
               <Blog key={blog.id} blog={blog} addLike={updateBlog} deleteBlog={deleteBlog}/>
-            
-          ))}
+
+            ))}
           </div>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
