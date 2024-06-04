@@ -68,6 +68,7 @@ const LoginForm = ({ handleLogin }) => {
           <InputLabel
             htmlFor="outlined-adornment-username"
             sx={{ color: 'white' }}
+            data-testid='username'
           >
             Username
           </InputLabel>
@@ -88,6 +89,7 @@ const LoginForm = ({ handleLogin }) => {
           <InputLabel
             htmlFor="outlined-adornment-password"
             sx={{ color: 'white' }}
+            data-testid='password'
           >
             Password
           </InputLabel>
