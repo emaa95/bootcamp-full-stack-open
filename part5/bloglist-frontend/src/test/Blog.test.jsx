@@ -65,3 +65,31 @@ test('clicking the button shows the blog details', async () => {
   expect(likesElement).toBeInTheDocument()
 
 })
+
+test('calls the event handler twice when the like button is clicked twice', async () => {
+  let component
+  const blog = {
+    id: '1',
+    title: 'test6',
+    author: 'ema',
+    url: 'http://testurl.com',
+    likes: 0,
+  }
+
+  const addLike = vi.fn()
+  const deleteBlog = vi.fn(() => Promise.resolve())
+
+  component = render(<Blog blog={blog} addLike={addLike} deleteBlog={deleteBlog} />)
+
+  const user = userEvent.setup()
+
+  const button = screen.getByText('view')
+  await user.click(button)
+
+  const likeButton = screen.getByTestId('like-button')
+
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  expect(addLike).toHaveBeenCalledTimes(2)
+})

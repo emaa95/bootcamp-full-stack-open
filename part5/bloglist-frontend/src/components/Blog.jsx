@@ -66,6 +66,7 @@ const Blog = ({ blog, addLike, deleteBlog }) => {
               onClick={handleLike}
               variant="contained"
               className="button like-button"
+              data-testid="like-button"
             >
               <FavoriteIcon className="heart-icon" />
             </Button>
