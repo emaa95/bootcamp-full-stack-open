@@ -68,13 +68,13 @@ const BlogForm = ({ createBlog }) => {
         </FormControl>
         <FormControl variant="outlined" style={{ marginRight: '15px' }}>
           <InputLabel
-            htmlFor="outlined-adornment-username"
+            htmlFor="outlined-adornment-author"
             sx={{ color: 'white' }}
           >
             Author
           </InputLabel>
           <OutlinedInput
-            id="outlined-adornment-username"
+            id="outlined-adornment-author"
             endAdornment={
               <InputAdornment position="end">
                 <Icon sx={{ color: 'white' }}><img src={author} alt="author"/></Icon>
@@ -88,13 +88,13 @@ const BlogForm = ({ createBlog }) => {
         </FormControl>
         <FormControl variant="outlined" style={{ marginRight: '15px' }}>
           <InputLabel
-            htmlFor="outlined-adornment-username"
+            htmlFor="outlined-adornment-url"
             sx={{ color: 'white' }}
           >
             URL
           </InputLabel>
           <OutlinedInput
-            id="outlined-adornment-username"
+            id="outlined-adornment-url"
             endAdornment={
               <InputAdornment position="end">
                 <Icon sx={{ color: 'white' }}><img src={url} alt="url"/></Icon>
