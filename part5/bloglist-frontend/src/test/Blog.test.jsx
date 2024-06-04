@@ -2,7 +2,9 @@ import React from 'react'
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import { expect, vi } from 'vitest'
+import userEvent from '@testing-library/user-event'
 import Blog from '../components/Blog'
+
 
 
 test('renders title and author', () => {
@@ -31,5 +33,35 @@ test('renders title and author', () => {
 
   const likesElement = screen.queryByText('0')
   expect(likesElement).not.toBeInTheDocument()
+
+})
+
+test('clicking the button shows the blog details', async () => {
+  const blog = {
+    id: '1',
+    title: 'test6',
+    author: 'ema',
+    url: 'http://testurl.com',
+    likes: 0,
+  }
+
+  const addLike = vi.fn(() => Promise.resolve())
+  const deleteBlog = vi.fn(() => Promise.resolve())
+
+  render(<Blog blog={blog} addLike={addLike} deleteBlog={deleteBlog} />)
+
+  const user = userEvent.setup()
+
+  const button = screen.getByText('view')
+  await user.click(button)
+
+  const authorElement = screen.queryByText('ema')
+  expect(authorElement).toBeInTheDocument()
+
+  const urlElement = screen.queryByText('http://testurl.com')
+  expect(urlElement).toBeInTheDocument()
+
+  const likesElement = screen.queryByText('0')
+  expect(likesElement).toBeInTheDocument()
 
 })
