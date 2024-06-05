@@ -115,7 +115,7 @@ const App = () => {
           <div className="div-galery">
             {blogsSortedLike.map((blog) => (
 
-              <Blog key={blog.id} blog={blog} addLike={updateBlog} deleteBlog={deleteBlog}/>
+              <Blog key={blog.id} blog={blog} addLike={updateBlog} deleteBlog={deleteBlog} currentUser={user}/>
 
             ))}
           </div>

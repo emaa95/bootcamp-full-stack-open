@@ -7,7 +7,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, addLike, deleteBlog }) => {
+const Blog = ({ blog, addLike, deleteBlog, currentUser }) => {
   const [blogVisible, setBlogVisible] = useState(false)
 
   const hideWhenVisible = { display: blogVisible ? 'none' : '' }
@@ -28,6 +28,7 @@ const Blog = ({ blog, addLike, deleteBlog }) => {
       deleteBlog(blog.id)
     }
   }
+  const isCreator = blog.user && currentUser && blog.user.username === currentUser.username
 
   if (blogVisible === false) {
     return (
@@ -70,13 +71,16 @@ const Blog = ({ blog, addLike, deleteBlog }) => {
             >
               <FavoriteIcon className="heart-icon" />
             </Button>
-            <Button
-              onClick={handleRemove}
-              variant="contained"
-              className="button"
-            >
-              <DeleteIcon />
-            </Button>
+            {isCreator &&(
+              <Button
+                onClick={handleRemove}
+                variant="contained"
+                className="button"
+                data-testid="delete-button"
+              >
+                <DeleteIcon />
+              </Button>
+            )}
           </div>
         </Card>
       </div>
