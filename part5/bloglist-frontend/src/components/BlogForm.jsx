@@ -50,6 +50,7 @@ const BlogForm = ({ createBlog }) => {
           <InputLabel
             htmlFor="outlined-adornment-username"
             sx={{ color: 'white' }}
+            data-testid='title'
           >
             Title
           </InputLabel>
@@ -70,6 +71,7 @@ const BlogForm = ({ createBlog }) => {
           <InputLabel
             htmlFor="outlined-adornment-author"
             sx={{ color: 'white' }}
+            data-testid='author'
           >
             Author
           </InputLabel>
@@ -90,6 +92,7 @@ const BlogForm = ({ createBlog }) => {
           <InputLabel
             htmlFor="outlined-adornment-url"
             sx={{ color: 'white' }}
+            data-testid='url'
           >
             URL
           </InputLabel>

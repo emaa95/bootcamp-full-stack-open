@@ -38,4 +38,27 @@ describe('Blog app', () => {
     await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)')
     })
   })
+
+  describe('When logged in', () => {
+    beforeEach(async ({ page }) => {
+        await page.getByTestId('username').fill('test')
+        await page.getByTestId('password').fill('test')
+        await page.getByRole('button', { name: 'log in' }).click()
+        await expect(page.getByText('test logged in')).toBeVisible()
+    })
+  
+    test('a new blog can be created', async ({ page }) => {
+        await page.getByRole('button', { name: 'create' }).click()
+        await page.getByTestId('title').fill('test')
+        await page.getByTestId('author').fill('test')
+        await page.getByTestId('url').fill('www.test.com')
+
+        await page.getByRole('button', { name: '+' }).click()
+
+        await expect(page.getByText('test was created successfully')).toBeVisible()
+        
+        const blogList = page.locator('.div-galery'); 
+        await expect(blogList).toContainText('test');
+    })
+  })
 })
