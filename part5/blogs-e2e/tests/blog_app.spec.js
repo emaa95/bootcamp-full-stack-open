@@ -1,4 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
+const exp = require('constants')
 
 describe('Blog app', () => {
   beforeEach(async ({ page }) => {
@@ -60,5 +61,25 @@ describe('Blog app', () => {
         const blogList = page.locator('.div-galery'); 
         await expect(blogList).toContainText('test');
     })
-  })
+    
+    test('like can be changed', async ({ page }) => {
+    
+      const blogElement = await page.locator(`text="test"`).locator('..'); // Ir al elemento padre
+      const viewButton = blogElement.getByRole('button', { name: 'view' });
+      await viewButton.click();
+    
+      // Verificar que se muestre el contenido después de hacer clic en "view"
+      await expect(blogElement.getByRole('button', { name: 'hide' })).toBeVisible(); 
+
+      const addLike = blogElement.locator('[data-testid="like-button"]');
+
+      const likesCountBefore = parseInt(await blogElement.locator('p').nth(0).innerText());
+      await addLike.click();
+      const likesCountAfter = parseInt(await blogElement.locator('p').nth(1).innerText());
+
+      expect(likesCountAfter).toBe(likesCountBefore + 1);
+
+    })
+    })
+
 })
