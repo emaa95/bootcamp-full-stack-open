@@ -131,6 +131,23 @@ describe('Blog app', () => {
       await expect(deleteButton).toBeHidden();
     })
 
+    test('blogs are ordered by likes in descending order', async ({ page }) => {
+      // Assuming each blog is in a container with class 'blog' and likes are in an element with class 'likes'
+      const blogElements = await page.locator('.blog').elementHandles();
+      
+      // Extract likes for each blog
+      let likes = [];
+      for (const blogElement of blogElements) {
+        const likesText = await blogElement.$eval('.likes', node => node.innerText);
+        likes.push(parseInt(likesText));
+      }
+
+      // Check if likes are sorted in descending order
+      for (let i = 0; i < likes.length - 1; i++) {
+        expect(likes[i]).toBeGreaterThanOrEqual(likes[i + 1]);
+      }
+    })
+
     })
 
 })

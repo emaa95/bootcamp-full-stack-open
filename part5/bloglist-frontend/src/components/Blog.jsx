@@ -61,7 +61,7 @@ const Blog = ({ blog, addLike, deleteBlog, currentUser }) => {
           </Button>
           <p>{blog.url}</p>
           <p>{blog.author}</p>
-          <p>{blog.likes}</p>
+          <p data-testid='likes'>{blog.likes}</p>
           <div className="div-buttons">
             <Button
               onClick={handleLike}
