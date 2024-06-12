@@ -24,12 +24,7 @@ const reducer = (state = initialState, action) => {
   console.log('action', action)
   switch (action.type) {
     case 'NEW_ANECDOTE':
-      const newAnecdote = {
-        content: action.payload,
-        id: getId(),
-        votes: 0
-      }
-      return [...state, newAnecdote]
+      return [...state, action.payload]
     case 'VOTE': 
       const id = action.payload.id
       const anecdoteToChange = state.find(a => a.id === id)
@@ -42,6 +37,24 @@ const reducer = (state = initialState, action) => {
       ).sort((a, b) => b.votes - a.votes)
   }
   return state
+}
+
+export const createAnecdote = (content) => {
+  return {
+    type: 'NEW_ANECDOTE',
+    payload: {
+      content,
+      id: getId(),
+      votes: 0
+    }
+  }
+}
+
+export const voteAnecdote = (id) => {
+  return {
+    type: 'VOTE',
+    payload: { id }
+  }
 }
 
 export default reducer
