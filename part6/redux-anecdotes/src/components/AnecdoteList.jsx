@@ -1,5 +1,3 @@
-// src/components/AnecdoteList.js
-
 import { useSelector, useDispatch } from 'react-redux';
 import { voteAnecdote } from '../reducers/anecdoteReducer';
 
