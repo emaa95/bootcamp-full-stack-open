@@ -3,6 +3,7 @@ import Notification from './components/Notification'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
+
 const App = () => {
 
   const handleVote = (anecdote) => {
@@ -11,7 +12,8 @@ const App = () => {
  
   const result = useQuery({    
     queryKey: ['anecdotes'],    
-    queryFn: () => axios.get('http://localhost:3001/anecdotes').then(res => res.data)  
+    queryFn: () => axios.get('http://localhost:3001/anecdotes').then(res => res.data),  
+    refetchOnWindowFocus: false
   })  
   
   console.log(JSON.parse(JSON.stringify(result)))
