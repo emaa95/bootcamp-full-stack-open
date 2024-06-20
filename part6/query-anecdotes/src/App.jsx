@@ -3,11 +3,13 @@ import Notification from './components/Notification'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { updateAnecdote } from './requests'
+import { useNotificationDispatch } from './NotificationContext'
 
 
 const App = () => {
 
   const queryClient = useQueryClient()
+  const dispatch = useNotificationDispatch()
 
   const updateAnecdoteMutation = useMutation({
     mutationFn: updateAnecdote,
@@ -22,9 +24,13 @@ const App = () => {
     },
   });
 
-  const handleVote = (anecdote) => {
+  const handleVote = async (anecdote) => {
     console.log('vote')
     updateAnecdoteMutation.mutate({...anecdote, votes: anecdote.votes + 1})
+    dispatch({ type: 'setNotification', payload: `anecdote '${anecdote.content}' voted`})
+    setTimeout(() => {
+      dispatch({ type: 'clearNotification' })
+    }, 5000)
   }
 
  
