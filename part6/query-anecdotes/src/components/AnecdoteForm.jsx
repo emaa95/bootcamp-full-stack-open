@@ -15,6 +15,12 @@ const AnecdoteForm = () => {
       setTimeout(() => {
         dispatch({ type: 'clearNotification' })
       }, 5000)
+    },
+    onError: () => {
+      dispatch({ type: 'setNotification', payload: `too short anecdote, must have length 5 or more`})
+      setTimeout(() => {
+        dispatch({ type: 'clearNotification' })
+      }, 5000)
     }
   })
 
