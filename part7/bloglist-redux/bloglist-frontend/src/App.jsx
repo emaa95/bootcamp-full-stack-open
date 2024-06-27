@@ -9,12 +9,14 @@ import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import AddIcon from '@mui/icons-material/Add'
 import './App.css'
+import { useDispatch, useSelector } from 'react-redux'
+import { showNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector((state) => state.blogs)
   const [user, setUser] = useState(null)
-  const [successMessage, setSuccessMessage] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -26,8 +28,8 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, [])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   const ColorButton = styled(Button)(({ theme }) => ({
     color: theme.palette.primary.contrastText,
@@ -51,29 +53,21 @@ const App = () => {
     setUser(null)
   }
 
-  const addBlog = (blogObject) => {
-    blogService.create(blogObject).then((returnedBlog) => {
-      setBlogs(blogs.concat(returnedBlog))
-      setSuccessMessage(`${blogObject.title} was created successfully`)
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 5000)
-    })
-  }
-
   const updateBlog = async (id, blogObject) => {
     try {
       const updatedBlog = await blogService.update(id, blogObject)
       setBlogs(blogs.map((blog) => (blog.id !== id ? blog : updatedBlog)))
-      setSuccessMessage(`${blogObject.title} was updated successfully`)
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 5000)
+      dispatch(
+        showNotification(
+          `${blogObject.title} was updated successfully`,
+          'success',
+          5
+        )
+      )
     } catch (e) {
-      setErrorMessage(`Cannot update blog ${blogObject.title}`)
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(
+        showNotification(`Cannot update blog ${blogObject.title}`, 'success', 5)
+      )
     }
   }
 
@@ -81,19 +75,13 @@ const App = () => {
     try {
       await blogService.remove(id)
       setBlogs(blogs.filter((blog) => blog.id !== id))
-      setSuccessMessage('Blog was successfully deleted')
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 5000)
+      dispatch(showNotification('Blog was successfully deleted', 'success', 5))
     } catch (e) {
-      setErrorMessage('Cannot delete blog')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(showNotification('Cannot delete blog', 'error', 5))
     }
   }
 
-  const blogsSortedLike = blogs.sort((a, b) => b.likes > a.likes)
+  const blogsSortedLike = [...blogs].sort((a, b) => b.likes > a.likes)
 
   return (
     <div>
@@ -102,7 +90,7 @@ const App = () => {
       ) : (
         <div>
           <h1 className="title">Blogs</h1>
-          <Notification success={successMessage} error={errorMessage} />
+          <Notification />
           <p style={{ color: 'white', marginLeft: '15px' }}>
             {`${user.username} logged in`}{' '}
             <ColorButton
@@ -114,7 +102,7 @@ const App = () => {
           </p>
           <h2 style={{ color: 'white', marginLeft: '15px' }}>Create new</h2>
           <Togglable buttonLabel="create" icon={<AddIcon></AddIcon>}>
-            <BlogForm createBlog={addBlog} />
+            <BlogForm />
           </Togglable>
           <div className="div-galery">
             {blogsSortedLike.map((blog) => (

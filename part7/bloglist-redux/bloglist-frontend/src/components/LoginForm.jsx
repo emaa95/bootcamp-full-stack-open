@@ -16,13 +16,14 @@ import { styled } from '@mui/material/styles'
 import login from '../assets/login.jpg'
 import './LoginForm.css'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { showNotification } from '../reducers/notificationReducer'
 
 const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [successMessage, setSuccessMessage] = useState(null)
   const [showPassword, setShowPassword] = useState(false)
+  const dispatch = useDispatch()
 
   const handleClickShowPassword = () => setShowPassword((show) => !show)
 
@@ -38,10 +39,7 @@ const LoginForm = ({ handleLogin }) => {
       setUsername('')
       setPassword('')
     } catch (error) {
-      setErrorMessage('Wrong credentials...')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(showNotification('Wrong credentials...', 'error', 5))
     }
   }
 
@@ -55,7 +53,7 @@ const LoginForm = ({ handleLogin }) => {
 
   return (
     <div className="div-principal">
-      <Notification error={errorMessage} success={successMessage} />
+      <Notification />
       <form onSubmit={handleLoginFormSubmit} className="div-form">
         <img
           src={login}

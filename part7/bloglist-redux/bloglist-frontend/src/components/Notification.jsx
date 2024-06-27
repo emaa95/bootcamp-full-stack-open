@@ -1,21 +1,26 @@
 import './Notification.css'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
-const Notification = ({ error, success }) => {
-  if (error === null && success === null) {
+const Notification = () => {
+  const notification = useSelector((state) => state.notification)
+
+  if (!notification.message) {
     return null
   }
 
-  if (error) {
-    return <div className="error">{error}</div>
+  if (notification.type === 'error') {
+    return <div className="error">{notification.message}</div>
   } else {
-    return <div className="succes">{success}</div>
+    return <div className="success">{notification.message}</div>
   }
 }
 
 Notification.propTypes = {
-  error: PropTypes.string,
-  success: PropTypes.string,
+  notification: PropTypes.shape({
+    message: PropTypes.string.isRequired,
+    type: PropTypes.oneOf(['success', 'error']).isRequired,
+  }),
 }
 
 export default Notification

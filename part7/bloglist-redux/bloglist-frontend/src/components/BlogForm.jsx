@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   Button,
   FormControl,
@@ -12,34 +11,31 @@ import author from '../assets/icons8-writer-male-24-white.png'
 import url from '../assets/icons8-url-24.png'
 import './BlogForm.css'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { showNotification } from '../reducers/notificationReducer'
+import { createBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ createBlog }) => {
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
-
-  const handleTitleChange = (event) => {
-    setNewTitle(event.target.value)
-  }
-
-  const handleAuthorChange = (event) => {
-    setNewAuthor(event.target.value)
-  }
-
-  const handleUrlChange = (event) => {
-    setNewUrl(event.target.value)
-  }
+const BlogForm = () => {
+  const dispatch = useDispatch()
 
   const addBlog = (event) => {
     event.preventDefault()
-    createBlog({
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl,
-    })
-    setNewTitle('')
-    setNewAuthor('')
-    setNewUrl('')
+    const newBlog = {
+      title: event.target.title.value,
+      author: event.target.author.value,
+      url: event.target.url.value,
+    }
+    dispatch(createBlog(newBlog))
+    dispatch(
+      showNotification(
+        `${newBlog.title} was created successfully`,
+        'success',
+        5
+      )
+    )
+    event.target.title.value = ''
+    event.target.author.value = ''
+    event.target.url.value = ''
   }
 
   return (
@@ -61,8 +57,7 @@ const BlogForm = ({ createBlog }) => {
               </InputAdornment>
             }
             label="Title"
-            value={newTitle}
-            onChange={handleTitleChange}
+            name="title"
             inputProps={{ style: { color: 'white' } }}
           />
         </FormControl>
@@ -84,8 +79,7 @@ const BlogForm = ({ createBlog }) => {
               </InputAdornment>
             }
             label="Author"
-            value={newAuthor}
-            onChange={handleAuthorChange}
+            name="author"
             inputProps={{ style: { color: 'white' } }}
           />
         </FormControl>
@@ -107,8 +101,7 @@ const BlogForm = ({ createBlog }) => {
               </InputAdornment>
             }
             label="URL"
-            value={newUrl}
-            onChange={handleUrlChange}
+            name="url"
             inputProps={{ style: { color: 'white' } }}
           />
         </FormControl>
