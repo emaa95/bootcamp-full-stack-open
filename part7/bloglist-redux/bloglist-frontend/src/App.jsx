@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
-import blogService from './services/blogs'
+import { useEffect } from 'react'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
@@ -10,25 +8,19 @@ import { styled } from '@mui/material/styles'
 import AddIcon from '@mui/icons-material/Add'
 import './App.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { showNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
+import { initialUser, logout } from './reducers/authReducer'
+import { initializeUsers } from './reducers/userReducer'
+import BlogList from './components/BlogList'
 
 const App = () => {
-  const blogs = useSelector((state) => state.blogs)
-  const [user, setUser] = useState(null)
+  const authUser = useSelector((state) => state.authUser)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
-
-  useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initialUser())
+    dispatch(initializeUsers())
   }, [dispatch])
 
   const ColorButton = styled(Button)(({ theme }) => ({
@@ -39,60 +31,21 @@ const App = () => {
     },
   }))
 
-  const handleLogin = (loggedInUser) => {
-    window.localStorage.setItem(
-      'loggedBlogappUser',
-      JSON.stringify(loggedInUser)
-    )
-    blogService.setToken(loggedInUser.token)
-    setUser(loggedInUser)
+  const handleLogout = (event) => {
+    event.preventDefault()
+    dispatch(logout())
   }
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
-  }
-
-  const updateBlog = async (id, blogObject) => {
-    try {
-      const updatedBlog = await blogService.update(id, blogObject)
-      setBlogs(blogs.map((blog) => (blog.id !== id ? blog : updatedBlog)))
-      dispatch(
-        showNotification(
-          `${blogObject.title} was updated successfully`,
-          'success',
-          5
-        )
-      )
-    } catch (e) {
-      dispatch(
-        showNotification(`Cannot update blog ${blogObject.title}`, 'success', 5)
-      )
-    }
-  }
-
-  const deleteBlog = async (id) => {
-    try {
-      await blogService.remove(id)
-      setBlogs(blogs.filter((blog) => blog.id !== id))
-      dispatch(showNotification('Blog was successfully deleted', 'success', 5))
-    } catch (e) {
-      dispatch(showNotification('Cannot delete blog', 'error', 5))
-    }
-  }
-
-  const blogsSortedLike = [...blogs].sort((a, b) => b.likes > a.likes)
 
   return (
     <div>
-      {user === null ? (
-        <LoginForm handleLogin={handleLogin} />
+      {authUser === null ? (
+        <LoginForm />
       ) : (
         <div>
           <h1 className="title">Blogs</h1>
           <Notification />
           <p style={{ color: 'white', marginLeft: '15px' }}>
-            {`${user.username} logged in`}{' '}
+            {`${authUser.username} logged in`}{' '}
             <ColorButton
               onClick={handleLogout}
               sx={{ backgroundColor: '#5b95d6' }}
@@ -105,15 +58,7 @@ const App = () => {
             <BlogForm />
           </Togglable>
           <div className="div-galery">
-            {blogsSortedLike.map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                addLike={updateBlog}
-                deleteBlog={deleteBlog}
-                currentUser={user}
-              />
-            ))}
+            <BlogList />
           </div>
         </div>
       )}

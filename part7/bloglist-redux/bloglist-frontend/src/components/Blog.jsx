@@ -6,30 +6,33 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteBlog, updateBlog } from '../reducers/blogReducer'
+import { showNotification } from '../reducers/notificationReducer'
 
-const Blog = ({ blog, addLike, deleteBlog, currentUser }) => {
+const Blog = ({ blog }) => {
   const [blogVisible, setBlogVisible] = useState(false)
-
   const hideWhenVisible = { display: blogVisible ? 'none' : '' }
   const showWhenVisible = { display: blogVisible ? '' : 'none' }
+  const dispatch = useDispatch()
+
+  const authUser = useSelector((state) => state.authUser)
 
   const handleLike = () => {
-    const blogObject = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-    }
-    addLike(blog.id, blogObject)
+    dispatch(updateBlog(blog))
+    dispatch(
+      showNotification(`${blog.title} was updated successfully`, 'success', 5)
+    )
   }
 
   const handleRemove = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      deleteBlog(blog.id)
+      dispatch(deleteBlog(blog.id))
+      dispatch(showNotification('Blog was successfully deleted', 'success', 5))
     }
   }
-  const isCreator =
-    blog.user && currentUser && blog.user.username === currentUser.username
+
+  const isCreator = blog.user.username === authUser.username ? true : false
 
   if (blogVisible === false) {
     return (
@@ -97,8 +100,6 @@ Blog.propTypes = {
     url: PropTypes.string.isRequired,
     likes: PropTypes.number.isRequired,
   }).isRequired,
-  addLike: PropTypes.func.isRequired,
-  deleteBlog: PropTypes.func.isRequired,
 }
 
 export default Blog

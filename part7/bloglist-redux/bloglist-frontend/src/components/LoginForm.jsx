@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import loginService from '../services/login'
 import Notification from '../components/Notification'
 import {
   Button,
@@ -13,16 +12,16 @@ import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import PersonIcon from '@mui/icons-material/Person'
 import { styled } from '@mui/material/styles'
-import login from '../assets/login.jpg'
+import loginImage from '../assets/login.jpg'
 import './LoginForm.css'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import { showNotification } from '../reducers/notificationReducer'
+import { login } from '../reducers/authReducer'
 
-const LoginForm = ({ handleLogin }) => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false)
+
   const dispatch = useDispatch()
 
   const handleClickShowPassword = () => setShowPassword((show) => !show)
@@ -34,10 +33,11 @@ const LoginForm = ({ handleLogin }) => {
   const handleLoginFormSubmit = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({ username, password })
-      handleLogin(user)
-      setUsername('')
-      setPassword('')
+      const username = event.target.username.value
+      const password = event.target.password.value
+      event.target.username.value = ''
+      event.target.password.value = ''
+      dispatch(login(username, password))
     } catch (error) {
       dispatch(showNotification('Wrong credentials...', 'error', 5))
     }
@@ -56,7 +56,7 @@ const LoginForm = ({ handleLogin }) => {
       <Notification />
       <form onSubmit={handleLoginFormSubmit} className="div-form">
         <img
-          src={login}
+          src={loginImage}
           width={'100%'}
           height={'40%'}
           loading="lazy"
@@ -78,8 +78,7 @@ const LoginForm = ({ handleLogin }) => {
               </InputAdornment>
             }
             label="Username"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
+            name="username"
             inputProps={{ style: { color: 'white' } }}
           />
         </FormControl>
@@ -111,8 +110,7 @@ const LoginForm = ({ handleLogin }) => {
               </InputAdornment>
             }
             label="Password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
+            name="password"
             inputProps={{ style: { color: 'white' } }}
           />
         </FormControl>
