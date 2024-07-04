@@ -1,22 +1,24 @@
 import { Card, Button } from '@mui/material'
-import { useState } from 'react'
 import './Blog.css'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import DeleteIcon from '@mui/icons-material/Delete'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, updateBlog } from '../reducers/blogReducer'
 import { showNotification } from '../reducers/notificationReducer'
+import { useParams } from 'react-router-dom'
 
-const Blog = ({ blog }) => {
-  const [blogVisible, setBlogVisible] = useState(false)
-  const hideWhenVisible = { display: blogVisible ? 'none' : '' }
-  const showWhenVisible = { display: blogVisible ? '' : 'none' }
+const Blog = () => {
   const dispatch = useDispatch()
 
+  const { id } = useParams()
+  const blog = useSelector((state) =>
+    state.blogs.find((blog) => blog.id === id)
+  )
   const authUser = useSelector((state) => state.authUser)
+
+  if (!blog) {
+    return null
+  }
 
   const handleLike = () => {
     dispatch(updateBlog(blog))
@@ -32,74 +34,37 @@ const Blog = ({ blog }) => {
     }
   }
 
-  const isCreator = blog.user.username === authUser.username ? true : false
+  const isCreator = blog.user?.username === authUser.username
 
-  if (blogVisible === false) {
-    return (
-      <div style={hideWhenVisible} className="div-card">
-        <Card className="card">
-          <h1>{blog.title}</h1>{' '}
+  return (
+    <div className="div-card">
+      <Card className="card">
+        <h1>{blog.title}</h1> <p>{blog.url}</p>
+        <p>{blog.author}</p>
+        <p data-testid="likes">{blog.likes}</p>
+        <div className="div-buttons">
           <Button
+            onClick={handleLike}
             variant="contained"
-            onClick={() => setBlogVisible(true)}
-            endIcon={<VisibilityIcon></VisibilityIcon>}
-            sx={{ backgroundColor: '#5b95d6' }}
+            className="button like-button"
+            data-testid="like-button"
           >
-            view
+            <FavoriteIcon className="heart-icon" />
           </Button>
-        </Card>
-      </div>
-    )
-  } else {
-    return (
-      <div style={showWhenVisible} className="div-card2">
-        <Card className="card">
-          <h1>{blog.title}</h1>{' '}
-          <Button
-            onClick={() => setBlogVisible(false)}
-            variant="contained"
-            endIcon={<VisibilityOffIcon />}
-            sx={{ backgroundColor: '#5b95d6' }}
-          >
-            hide
-          </Button>
-          <p>{blog.url}</p>
-          <p>{blog.author}</p>
-          <p data-testid="likes">{blog.likes}</p>
-          <div className="div-buttons">
+          {isCreator && (
             <Button
-              onClick={handleLike}
+              onClick={handleRemove}
               variant="contained"
-              className="button like-button"
-              data-testid="like-button"
+              className="button"
+              data-testid="delete-button"
             >
-              <FavoriteIcon className="heart-icon" />
+              <DeleteIcon />
             </Button>
-            {isCreator && (
-              <Button
-                onClick={handleRemove}
-                variant="contained"
-                className="button"
-                data-testid="delete-button"
-              >
-                <DeleteIcon />
-              </Button>
-            )}
-          </div>
-        </Card>
-      </div>
-    )
-  }
-}
-
-Blog.propTypes = {
-  blog: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    likes: PropTypes.number.isRequired,
-  }).isRequired,
+          )}
+        </div>
+      </Card>
+    </div>
+  )
 }
 
 export default Blog
