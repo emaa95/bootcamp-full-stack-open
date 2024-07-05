@@ -1,13 +1,15 @@
-import { Card, Button } from '@mui/material'
+import { useState } from 'react'
+import { Card, Button, TextField } from '@mui/material'
 import './Blog.css'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteBlog, updateBlog } from '../reducers/blogReducer'
+import { deleteBlog, updateBlog, commentBlog } from '../reducers/blogReducer'
 import { showNotification } from '../reducers/notificationReducer'
 import { useParams } from 'react-router-dom'
 
 const Blog = () => {
+  const [comment, setComment] = useState('')
   const dispatch = useDispatch()
 
   const { id } = useParams()
@@ -32,6 +34,12 @@ const Blog = () => {
       dispatch(deleteBlog(blog.id))
       dispatch(showNotification('Blog was successfully deleted', 'success', 5))
     }
+  }
+
+  const handleComment = (event) => {
+    event.preventDefault()
+    dispatch(commentBlog(id, comment))
+    setComment('')
   }
 
   const isCreator = blog.user?.username === authUser.username
@@ -62,6 +70,26 @@ const Blog = () => {
             </Button>
           )}
         </div>
+        <h4>Comments</h4>
+        {blog.comments.length === 0 ? (
+          <p>No comments yet</p>
+        ) : (
+          blog.comments.map((comment, index) => (
+            <div key={index}>{comment}</div>
+          ))
+        )}
+        <form onSubmit={handleComment} className="comment-form">
+          <TextField
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            label="Add a comment"
+            variant="outlined"
+            fullWidth
+          />
+          <Button type="submit" variant="contained" color="primary">
+            Add Comment
+          </Button>
+        </form>
       </Card>
     </div>
   )
