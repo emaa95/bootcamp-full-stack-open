@@ -1,13 +1,24 @@
 .card {
-  margin: 15px;
+  margin: auto;
+  max-width: 70%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 15px;
   background-color: #375696 !important;
   color: white !important;
-  width: 180px;
-  border-radius: 10px !important;
+  border-radius: 16px !important;
+  box-shadow: rgba(145, 158, 171, 0.08) 0px 0px 2px 0px, rgba(145, 158, 171, 0.08) 0px 12px 24px -4px !important;
+}
+
+.title-div, .url-div, .likes-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.likes-div{
+  padding-left: 40px;
 }
 
 .div-buttons {
@@ -22,14 +33,17 @@
   padding: 5px !important;
   background-color: #477cc9 !important;
   color: white;
+  margin: 10px !important;
   /*transition: color 1s ease, transform 1s ease !important;*/
 }
 
 .heart-icon {
   color: white; /* Inicialmente blanco */
+  height: 15px !important;
+  width: 15px !important;
   transition:
     color 3s ease,
-    transform 3s ease !important;
+    transform 3s ease;
 }
 
 .like-button:active .heart-icon {
@@ -39,4 +53,30 @@
 
 h1 {
   margin: 0;
+}
+
+.comment-form {
+  margin: 20px;
+}
+
+/* Input comment*/
+
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border-color: white !important
+}
+
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+  color: white !important;
+}
+
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+  color: white !important;
+}
+
+.css-md26zr-MuiInputBase-root-MuiOutlinedInput-root {
+  color: white !important;
+}
+
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
+  color: white !important;
 }

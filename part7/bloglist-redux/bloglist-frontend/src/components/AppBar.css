@@ -1,0 +1,33 @@
+.appBar {
+  font-family: 'Courier New', Courier, monospace !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0.2rem;
+  border-radius: 99px;
+  margin-bottom: 20px;
+}
+
+.navButton {
+  position: relative;
+  color: white !important;
+  text-transform: none;
+  font-weight: bold;
+}
+
+.navButton::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.navButton:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}

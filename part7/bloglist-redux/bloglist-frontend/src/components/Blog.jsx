@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Card, Button, TextField } from '@mui/material'
+import { Card, Button, TextField, Icon } from '@mui/material'
 import './Blog.css'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, updateBlog, commentBlog } from '../reducers/blogReducer'
 import { showNotification } from '../reducers/notificationReducer'
 import { useParams } from 'react-router-dom'
+import url from '../assets/icons8-url-24.png'
 
 const Blog = () => {
   const [comment, setComment] = useState('')
@@ -47,18 +48,8 @@ const Blog = () => {
   return (
     <div className="div-card">
       <Card className="card">
-        <h1>{blog.title}</h1> <p>{blog.url}</p>
-        <p>{blog.author}</p>
-        <p data-testid="likes">{blog.likes}</p>
-        <div className="div-buttons">
-          <Button
-            onClick={handleLike}
-            variant="contained"
-            className="button like-button"
-            data-testid="like-button"
-          >
-            <FavoriteIcon className="heart-icon" />
-          </Button>
+        <div className="title-div">
+          <h1>{blog.title}</h1>
           {isCreator && (
             <Button
               onClick={handleRemove}
@@ -70,12 +61,30 @@ const Blog = () => {
             </Button>
           )}
         </div>
+        <div className="url-div">
+          <Icon sx={{ color: 'white' }}>
+            <img src={url} alt="url" height="15" width="15" />
+          </Icon>
+          <p>{blog.url}</p>
+        </div>
+        <p>{blog.author}</p>
+        <div className="likes-div">
+          <p data-testid="likes">{blog.likes}</p>
+          <Button
+            onClick={handleLike}
+            variant="contained"
+            className="button like-button"
+            data-testid="like-button"
+          >
+            <FavoriteIcon className="heart-icon" />
+          </Button>
+        </div>
         <h4>Comments</h4>
         {blog.comments.length === 0 ? (
           <p>No comments yet</p>
         ) : (
           blog.comments.map((comment, index) => (
-            <div key={index}>{comment}</div>
+            <div key={index}> - {comment}</div>
           ))
         )}
         <form onSubmit={handleComment} className="comment-form">
@@ -84,10 +93,19 @@ const Blog = () => {
             onChange={(e) => setComment(e.target.value)}
             label="Add a comment"
             variant="outlined"
-            fullWidth
+            className="input-comment"
           />
-          <Button type="submit" variant="contained" color="primary">
-            Add Comment
+          <Button
+            type="submit"
+            variant="contained"
+            style={{
+              fontSize: '20px',
+              backgroundColor: '#5b95d6',
+              height: '100%',
+              marginLeft: '20px',
+            }}
+          >
+            +
           </Button>
         </form>
       </Card>

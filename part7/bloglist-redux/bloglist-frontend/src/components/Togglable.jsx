@@ -20,7 +20,7 @@ const Togglable = (props) => {
           onClick={toggleVisibility}
           variant="contained"
           endIcon={props.icon}
-          sx={{ backgroundColor: '#5b95d6', marginLeft: '15px' }}
+          sx={{ backgroundColor: '#5b95d6', marginLeft: '60px' }}
         >
           {props.buttonLabel}
         </Button>
@@ -34,7 +34,7 @@ const Togglable = (props) => {
           sx={{
             backgroundColor: '#5b95d6',
             marginTop: '15px',
-            marginLeft: '15px',
+            marginLeft: '60px',
           }}
         >
           Cancel

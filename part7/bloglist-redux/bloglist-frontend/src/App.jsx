@@ -12,9 +12,9 @@ import { initializeUsers } from './reducers/userReducer'
 import BlogList from './components/BlogList'
 import UserList from './components/UserList'
 import { Route, Routes } from 'react-router-dom'
-import Menu from './components/Menu'
 import User from './components/User'
 import Blog from './components/Blog'
+import ResponsiveAppBar from './components/AppBar'
 
 const App = () => {
   const authUser = useSelector((state) => state.authUser)
@@ -32,15 +32,15 @@ const App = () => {
 
   return (
     <div>
-      <Menu />
-      <h1 className="title">Blogs</h1>
+      <ResponsiveAppBar />
       <Notification />
       <Routes>
         <Route
           path="/"
           element={
             <div>
-              <h2 style={{ color: 'white', marginLeft: '15px' }}>Create new</h2>
+              <h1 className="title">Blogs</h1>
+              <h2 style={{ color: 'white', marginLeft: '60px' }}>Create new</h2>
               <Togglable buttonLabel="create" icon={<AddIcon></AddIcon>}>
                 <BlogForm />
               </Togglable>

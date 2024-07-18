@@ -1,0 +1,29 @@
+h2 {
+  color: white;
+  margin-left:190px;
+  margin-bottom: 20px;
+}
+
+.table-container {
+  min-width: 150px;
+  max-width: 70%;
+  background-color: transparent !important;
+  margin: auto;
+
+
+}
+
+.css-1ygcj2i-MuiTableCell-root{
+  color: white !important;
+}
+
+.css-1ex1afd-MuiTableCell-root {
+  color: white !important;
+}
+
+@media (max-width: 600px) {
+  h2 {
+    text-align: center;
+    margin-left: 0;
+  }
+}

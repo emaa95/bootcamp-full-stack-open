@@ -1,11 +1,13 @@
 body {
   background-color: #263554;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .title {
   color: white;
   font-size: 50px;
   margin-left: 15px;
+  text-align: center;
 }
 
 h3 {
@@ -31,8 +33,5 @@ paleta de colores
 
 .div-galery {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  overflow: auto;
+  justify-content: center;
 }
